@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Application</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/my.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Weather Application</h1>
+        <form method="post">
+            <div class="form-group mb-3">
+                <label for="city">Enter City:</label>
+                <input type="text" class="form-control" id="city" name="city" placeholder="City Name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Get Weather</button>
+        </form>
+        {% if error %}
+        <div class="alert alert-danger mt-3">
+            {{ error }}
+        </div>
+        {% endif %}
+        {% if weather_data %}
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Weather</th>
+                    <th>Max Temp (°C)</th>
+                    <th>Min Temp (°C)</th>
+                    <th>Wind Speed (m/s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day in weather_data.dataseries %}
+                <tr>
+                    <td>{{ day.date }}</td>
+                    <td>{{ day.weather | format_weather }}</td>
+                    <td>{{ day.temp2m.max }}</td>
+                    <td>{{ day.temp2m.min }}</td>
+                    <td>{{ day.wind10m_max | format_speed_wind }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</body>
+</html>
